@@ -7,6 +7,11 @@
             Logic.newGameField();
             //Logic.playDecisionMakerAI();
             UI.displayTicTacToeArray(Logic.gameField);
+            
+            UI.playerInput();
+            Logic.gameProgressTracker();
+
+
         }
     }
 }
