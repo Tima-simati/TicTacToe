@@ -4,7 +4,9 @@
     {
         static void Main(string[] args)
         {
-            
+            Logic.newGameField();
+            //Logic.playDecisionMakerAI();
+            UI.displayTicTacToeArray(Logic.gameField);
         }
     }
 }
