@@ -35,29 +35,28 @@ namespace TicTacToe
             }
         }
         //check when the game is over
-        public static void gameProgressTracker()
+        public static void gameProgressTracker(int positionSet)
         {
+            //turn userInput into array coordinates to set player symbol
+            int row_index = 0;
+            int column_index = 0;
+            for (int i = 0; i < rows; i++)
+            {
+                if (positionSet / rows == i)
+                {
+                    row_index = i;
+                }
+            }
+            for (int j = 0; j < columns; j++)
+            {
+                if (positionSet / columns == j)
+                {
+                    column_index = j;
+                }
+            }
+            gameField[row_index, column_index] = "X"; 
+
             
         }
-
-        /// <summary>
-        /// Support Method to put the Text in center with paddig
-        /// </summary>
-        /// <param name="text">this is the character, string, which needs to be put in center</param>
-        /// <param name="width">the width of extra added space</param>
-        /// <returns>a new string with the text and padding with spaces to the left and right is added</returns>
-        public static string CenterText(string text, int width)
-        {           
-            if (text.Length >= width)
-            {
-                return text;
-            }
-            int totalPadding = width - text.Length;
-            int padLeft = totalPadding / 2;
-            int padRight = totalPadding - padLeft;
-
-            return new string(' ', padLeft) + text + new string(' ', padRight);
-        }
-
     }
 }

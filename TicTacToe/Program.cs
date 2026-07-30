@@ -8,8 +8,9 @@
             //Logic.playDecisionMakerAI();
             UI.displayTicTacToeArray(Logic.gameField);
             
-            UI.playerInput();
-            Logic.gameProgressTracker();
+            int position = UI.playerInput();
+            Logic.gameProgressTracker(position);
+            UI.displayTicTacToeArray(Logic.gameField);
 
 
         }
