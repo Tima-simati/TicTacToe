@@ -11,8 +11,13 @@ namespace TicTacToe
     static public class UI
     {
         public static string gridLines = "-";
-        static int gridLineBetween = Logic.gameField.GetLength(1) * 4;
+        static int gridLineBetween = Program.gameField.GetLength(1) * 4;
 
+
+        public static void welcomeScreen()
+        {
+            Console.WriteLine("Hi there. Let's play a friendly round of TicTacToe.");
+        }
         //output array to console
         /// <summary>
         /// method to display the current gameField; a grid around the symbols will also be added
@@ -30,7 +35,7 @@ namespace TicTacToe
                 Console.Write("|");
                 for (int j = 0; j < array2D.GetLength(1); j++)
                 {
-                    Console.Write(CenterText(array2D[i,j], 3));
+                    Console.Write(CenterText(array2D[i, j], 3));
                     //Console.Write(CenterText("X", 3));
                     Console.Write("|");
                 }
@@ -40,58 +45,76 @@ namespace TicTacToe
             //reset of gridLines
             gridLines = "-";
         }
-     
+
         //read player input to where to place the symbol
         //think of a way how a user can actually place a symbol into the play area
         public static int playerInput()
         {
-            int row_index = 0;
-            int column_index = 0;
-            string[,] fieldChooseArray = new string[Logic.ROWS, Logic.COLUMNS];
-            int chiffre = 1;
+            int rows = 3, columns = 3; //for indices of User Interface Field
+            string[,] fieldChooseArray = new string[rows, columns]; //User interface field
+            int chiffre = 1; //for player symbol position initialization
+            bool existsInList = false; //bool var to check if playerInput is valid
+
+            List<int> possibleChoices = new List<int>();
+            //user interface array to visualize for player to see, which field is empty
             for (int i = 0; i < fieldChooseArray.GetLength(0); i++)
             {
                 for (int j = 0; j < fieldChooseArray.GetLength(1); j++)
                 {
-                    if (Logic.gameField[i, j] == "X" || Logic.gameField[i, j] == "O")
+                    if (Program.gameField[i, j] == "X" || Program.gameField[i, j] == "O")
                     {
                         fieldChooseArray[i, j] = " ";
                         chiffre++;
                     }
                     else
                     {
+                        possibleChoices.Add(chiffre);
                         string field = Convert.ToString(chiffre++).PadLeft(2).PadRight(3);
                         fieldChooseArray[i, j] = field.Pastel(Color.Green);
                     }
+
                 }
             }
-            Console.WriteLine("Please choose, where you want to put your symbol next.\n Choose your placement according to the free fields 1 to 9.");
-            //Funktion einbauen, wo nur verfügbare Zahlen im WriteLine rauskommen
+            Console.WriteLine("Please choose, where you want to put your symbol next.\n Choose your placement according to the green free fields.");
+            Console.WriteLine($"Fields available are: {string.Join(", ", possibleChoices)}");
+
             displayTicTacToeArray(fieldChooseArray);
             int playerInput = 0;
             int.TryParse(Console.ReadLine(), out playerInput);
-        
+            while (existsInList == false)
+            {
+                if (possibleChoices.Contains(playerInput))
+                {
+                    break;
+                }
+                Console.WriteLine($"Position {playerInput} is not available. Fields available are: {string.Join(", ", possibleChoices)}. Choose:");
+                int.TryParse(Console.ReadLine(), out playerInput);
+            }
             return playerInput;
         }
         //Display message if player wins
         public static void displayPlayerWins()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Congratulations, you won!");
         }
         //Display message if player loses
         public static void displayPlayerLoses()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("You lost. Try next time.");
         }
         //Display message if player ties
         public static void displayPlayerTies()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Oh! A Tie. Nobody wins, nobody loses.");
         }
         //Give player Choice, which symbol he wants to use
         public static int choosePlayerSymbol()
         {
             throw new NotImplementedException();
+        }
+        public static void cleanScreen()
+        {
+            Console.Clear();
         }
         public static bool startNewGame()
         {
