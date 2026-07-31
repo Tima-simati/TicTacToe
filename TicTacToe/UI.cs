@@ -30,7 +30,7 @@ namespace TicTacToe
                 Console.Write("|");
                 for (int j = 0; j < array2D.GetLength(1); j++)
                 {
-                    Console.Write(CenterText(array2D[i,j], 3));
+                    Console.Write(CenterText(array2D[i, j], 3));
                     //Console.Write(CenterText("X", 3));
                     Console.Write("|");
                 }
@@ -40,13 +40,11 @@ namespace TicTacToe
             //reset of gridLines
             gridLines = "-";
         }
-     
+
         //read player input to where to place the symbol
         //think of a way how a user can actually place a symbol into the play area
         public static int playerInput()
         {
-            int row_index = 0;
-            int column_index = 0;
             string[,] fieldChooseArray = new string[Logic.ROWS, Logic.COLUMNS];
             int chiffre = 1;
             for (int i = 0; i < fieldChooseArray.GetLength(0); i++)
@@ -66,11 +64,11 @@ namespace TicTacToe
                 }
             }
             Console.WriteLine("Please choose, where you want to put your symbol next.\n Choose your placement according to the free fields 1 to 9.");
-            //Funktion einbauen, wo nur verfügbare Zahlen im WriteLine rauskommen
+            //Maybe build a function to only show available numbers in Console?
             displayTicTacToeArray(fieldChooseArray);
             int playerInput = 0;
             int.TryParse(Console.ReadLine(), out playerInput);
-        
+            Program.turnCounter++; // increase the turn counter
             return playerInput;
         }
         //Display message if player wins
@@ -92,6 +90,10 @@ namespace TicTacToe
         public static int choosePlayerSymbol()
         {
             throw new NotImplementedException();
+        }
+        public static void cleanScreen()
+        {
+            Console.Clear();
         }
         public static bool startNewGame()
         {
