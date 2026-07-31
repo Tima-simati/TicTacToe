@@ -47,7 +47,7 @@ namespace TicTacToe
         {
             int row_index = 0;
             int column_index = 0;
-            string[,] fieldChooseArray = new string[Logic.rows, Logic.columns];
+            string[,] fieldChooseArray = new string[Logic.ROWS, Logic.COLUMNS];
             int chiffre = 1;
             for (int i = 0; i < fieldChooseArray.GetLength(0); i++)
             {
@@ -74,17 +74,17 @@ namespace TicTacToe
             return playerInput;
         }
         //Display message if player wins
-        public static string displayPlayerWins()
+        public static void displayPlayerWins()
         {
             throw new NotImplementedException();
         }
         //Display message if player loses
-        public static string displayPlayerLoses()
+        public static void displayPlayerLoses()
         {
             throw new NotImplementedException();
         }
         //Display message if player ties
-        public static string displayPlayerTies()
+        public static void displayPlayerTies()
         {
             throw new NotImplementedException();
         }

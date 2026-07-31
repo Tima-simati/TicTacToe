@@ -9,7 +9,7 @@
             UI.displayTicTacToeArray(Logic.gameField);
             
             int position = UI.playerInput();
-            Logic.gameProgressTracker(position);
+            Logic.insertUserInputInArray(position);
             UI.displayTicTacToeArray(Logic.gameField);
 
 
