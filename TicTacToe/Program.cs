@@ -15,23 +15,23 @@
 
             //while (gameResult == false)
             //{
-            if (turnCounter > 9)
-            {
-                UI.displayPlayerTies();
-                return;
-            }
-            UI.displayTicTacToeArray(gameField);
-            //Player turn
-            position = UI.playerInput();
-            UI.cleanScreen();
-            Logic.insertInputInArray(position, symbolPlayer);
-            UI.displayTicTacToeArray(gameField);
-            Logic.checkForWin();
-            turnCounter++;// increase the turn counter
-            //CPU turn
-            Logic.playDecisionMakerAI();
-            Logic.checkForWin();
-            turnCounter++;
+                if (turnCounter > 9)
+                {
+                    UI.displayPlayerTies();
+                    return;
+                }
+                UI.displayTicTacToeArray(gameField);
+                //Player turn
+                position = UI.playerInput();
+                UI.cleanScreen();
+                Logic.insertInputInArray(position, symbolPlayer);
+                UI.displayTicTacToeArray(gameField);
+                Logic.checkForWin();
+                turnCounter++;// increase the turn counter
+                //CPU turn
+                Logic.playDecisionMakerAI();
+                Logic.checkForWin();
+                turnCounter++;
             //}
             ////game ended on players turn
             //if (turnCounter % 2 == 1)
@@ -43,7 +43,6 @@
             //{
             //    UI.displayPlayerLoses();
             //}
-
 
         }
     }
