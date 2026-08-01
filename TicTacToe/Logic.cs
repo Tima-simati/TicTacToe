@@ -32,6 +32,7 @@ namespace TicTacToe
         /// </summary>
         public static void playDecisionMakerAI()
         {
+
             //variables to randomly put AI symbol into a field
             const int LOWERBOUND_INDEX = 0;
             const int UPPERBOUND_INDEX = 2;
@@ -45,46 +46,57 @@ namespace TicTacToe
             {
                 Program.gameField[CENTER_INDEX, CENTER_INDEX] = "O";
                 return;
-            }
-            if (horizontalLineCheckAI() != 0)
-            {
-                inputOfAI = horizontalLineCheckAI();
-                insertInputInArray(inputOfAI, symbolAI);
-                return;
-            }
-            if (verticalLineCheckAI() != 0)
-            {
-                inputOfAI = horizontalLineCheckAI();
-                insertInputInArray(inputOfAI, symbolAI);
-                return;
-            }
-            if (diagonalLineCheckAI() != 0)
-            {
-                inputOfAI = diagonalLineCheckAI();
-                insertInputInArray(inputOfAI, symbolAI);
-                return;
-            }
-            if (Program.gameField[randomRow, randomColumn] == " ")
-            {
-                Program.gameField[randomRow, randomColumn] = "O";
-                //if AI should input O iteratively in fields, instead of random
-                //for (int i = 0; i < ROWS; i++)
-                //{
-                //    for (int j = 0; j < COLUMNS; j++)
-                //    {
-                //        if (Program.gameField[i, j] == " ")
-                //        {
-                //            Program.gameField[i, j] = "O";
-                //        }
-                //    }
-                //}
-                return;
+
+                //first move to place "O" in the center, only if field is free
+                if (Program.turnCounter == 2 && Program.gameField[CENTER_INDEX, CENTER_INDEX] == " ")
+                {
+                    Program.gameField[CENTER_INDEX, CENTER_INDEX] = "O";
+
+                }
+                if (horizontalLineCheckAI() != 0)
+                {
+                    inputOfAI = horizontalLineCheckAI();
+                    insertInputInArray(inputOfAI, symbolAI);
+                    return;
+                }
+                if (verticalLineCheckAI() != 0)
+                {
+                    inputOfAI = horizontalLineCheckAI();
+                    insertInputInArray(inputOfAI, symbolAI);
+                    return;
+
+                }
+                if (diagonalLineCheckAI() != 0)
+                {
+                    inputOfAI = diagonalLineCheckAI();
+
+                    insertInputInArray(inputOfAI, symbolAI);
+                    return;
+                }
+                if (Program.gameField[randomRow, randomColumn] == " ")
+                {
+                    Program.gameField[randomRow, randomColumn] = "O";
+                    //if AI should input O iteratively in fields, instead of random
+                    //for (int i = 0; i < ROWS; i++)
+                    //{
+                    //    for (int j = 0; j < COLUMNS; j++)
+                    //    {
+                    //        if (Program.gameField[i, j] == " ")
+                    //        {
+                    //            Program.gameField[i, j] = "O";
+                    //        }
+                    //    }
+                    //}
+                    return;
+
+                }                
             }
         }
         /// <summary>
         /// turn user input or AI input into array coordinates to set player symbol
         /// </summary>
         /// <param name="positionSet">input of numbers from 1 to 9 according to the 9 fields</param>
+
         public static void insertInputInArray(int positionSet, string symbol)
         {
             int row_index = 0;
@@ -213,6 +225,9 @@ namespace TicTacToe
 
             return false;
         }
+
+        /*checks when the game is over*/
+
         /// <summary>
         /// check if any of the 3 horizontal lines have same 3 symbols to win
         /// </summary>
