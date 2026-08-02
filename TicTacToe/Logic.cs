@@ -32,7 +32,6 @@ namespace TicTacToe
         /// </summary>
         public static void playDecisionMakerAI()
         {
-
             //variables to randomly put AI symbol into a field
             const int LOWERBOUND_INDEX = 0;
             const int UPPERBOUND_INDEX = 2;
@@ -42,56 +41,49 @@ namespace TicTacToe
             int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
 
             //first move to place "O" in the center, only if field is free
-            if (Program.turnCounter == 2 && Program.gameField[CENTER_INDEX, CENTER_INDEX] == " ")
+            if (Program.turnCounter == 2 && Program.gameField[CENTER_INDEX, CENTER_INDEX] == "   ")
             {
                 Program.gameField[CENTER_INDEX, CENTER_INDEX] = "O";
                 return;
+            }
 
-                //first move to place "O" in the center, only if field is free
-                if (Program.turnCounter == 2 && Program.gameField[CENTER_INDEX, CENTER_INDEX] == " ")
-                {
-                    Program.gameField[CENTER_INDEX, CENTER_INDEX] = "O";
+            if (horizontalLineCheckAI() == true)
+            {
+                horizontalLineCheckAI();
+                return;
+            }
+            if (verticalLineCheckAI() != 0)
+            {
+                inputOfAI = verticalLineCheckAI();
+                insertInputInArray(inputOfAI, symbolAI);
+                return;
 
-                }
-                if (horizontalLineCheckAI() != 0)
-                {
-                    inputOfAI = horizontalLineCheckAI();
-                    insertInputInArray(inputOfAI, symbolAI);
-                    return;
-                }
-                if (verticalLineCheckAI() != 0)
-                {
-                    inputOfAI = horizontalLineCheckAI();
-                    insertInputInArray(inputOfAI, symbolAI);
-                    return;
+            }
+            if (diagonalLineCheckAI() != 0)
+            {
+                inputOfAI = diagonalLineCheckAI();
+                insertInputInArray(inputOfAI, symbolAI);
+                return;
+            }
+            if (Program.gameField[randomRow, randomColumn] == "   ")
+            {
+                Program.gameField[randomRow, randomColumn] = "O";
+                //if AI should input O iteratively in fields, instead of random
+                //for (int i = 0; i < ROWS; i++)
+                //{
+                //    for (int j = 0; j < COLUMNS; j++)
+                //    {
+                //        if (Program.gameField[i, j] == "   ")
+                //        {
+                //            Program.gameField[i, j] = "O";
+                //        }
+                //    }
+                //}
+                return;
 
-                }
-                if (diagonalLineCheckAI() != 0)
-                {
-                    inputOfAI = diagonalLineCheckAI();
-
-                    insertInputInArray(inputOfAI, symbolAI);
-                    return;
-                }
-                if (Program.gameField[randomRow, randomColumn] == " ")
-                {
-                    Program.gameField[randomRow, randomColumn] = "O";
-                    //if AI should input O iteratively in fields, instead of random
-                    //for (int i = 0; i < ROWS; i++)
-                    //{
-                    //    for (int j = 0; j < COLUMNS; j++)
-                    //    {
-                    //        if (Program.gameField[i, j] == " ")
-                    //        {
-                    //            Program.gameField[i, j] = "O";
-                    //        }
-                    //    }
-                    //}
-                    return;
-
-                }                
             }
         }
+
         /// <summary>
         /// turn user input or AI input into array coordinates to set player symbol
         /// </summary>
@@ -128,26 +120,42 @@ namespace TicTacToe
         /// checks horizontal lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
         /// </summary>
         /// <returns>position of AI next move</returns>
-        public static int horizontalLineCheckAI()
+        public static bool horizontalLineCheckAI()
         {
-            int symbolCounter = 0;
-            int positionMoveAI = 0;
+            int symbolCounterUser = 0;
+            int symbolCounterAI = 0;
+            int relevantRow = 0;
+            bool twoSymbolsRow = false;
 
             for (int i = 0; i < ROWS; i++)
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (Program.gameField[i, j] == Program.gameField[i, j + 1])
+                    if (Program.gameField[i, j] == Program.symbolPlayer)
                     {
-                        symbolCounter++;
+                        symbolCounterUser++;
                     }
-                    if (symbolCounter == 2)
+                    if (Program.gameField[i, j] == symbolAI)
                     {
-                        positionMoveAI = i * 3 + j;
+                        symbolCounterAI++;
                     }
+                    if (symbolCounterUser == 2 || symbolCounterAI == 2)
+                    {
+                        relevantRow = i;
+                        twoSymbolsRow = true;
+                        break;
+                    }
+                    twoSymbolsRow = false;
                 }
             }
-            return positionMoveAI; //outputs AI next move
+            for (int i = 0; i < LAST_INDEX_GRID; i++)
+            {
+                if (Program.gameField[relevantRow, i] == "   ")
+                {
+                    Program.gameField[relevantRow, i] = symbolAI;
+                }
+            }
+            return twoSymbolsRow;
         }
         /// <summary>
         /// checks vertical lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
@@ -239,7 +247,7 @@ namespace TicTacToe
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (Program.gameField[i, j] != Program.gameField[i, j + 1])
+                    if (Program.gameField[i, j] != "   " && Program.gameField[i, j] != Program.gameField[i, j + 1])
                     {
                         allEqual = false;
                     }
@@ -262,7 +270,7 @@ namespace TicTacToe
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (Program.gameField[j, i] != Program.gameField[j + 1, i])
+                    if (Program.gameField[i, j] != "   " && Program.gameField[j, i] != Program.gameField[j + 1, i])
                     {
                         allEqual = false;
                     }
@@ -283,7 +291,7 @@ namespace TicTacToe
             bool allEqual = true;
             for (int i = 0, j = 0; i < LAST_INDEX_GRID; i++, j++)
             {
-                if (Program.gameField[i, j] != Program.gameField[i + 1, j + 1])
+                if (Program.gameField[i, j] != "   " && Program.gameField[i, j] != Program.gameField[i + 1, j + 1])
                 {
                     allEqual = false;
                 }
@@ -295,7 +303,7 @@ namespace TicTacToe
             allEqual = true;
             for (int i = LAST_INDEX_GRID, j = 0; i > 0; i--, j++)
             {
-                if (Program.gameField[i, j] != Program.gameField[i - 1, j + 1])
+                if (Program.gameField[i, j] != "   " && Program.gameField[i, j] != Program.gameField[i - 1, j + 1])
                 {
                     allEqual = false;
                 }

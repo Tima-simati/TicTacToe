@@ -13,8 +13,8 @@
             UI.welcomeScreen();
             Logic.newGameField();
 
-            //while (gameResult == false)
-            //{
+            while (gameResult == false)
+            {
                 if (turnCounter > 9)
                 {
                     UI.displayPlayerTies();
@@ -32,7 +32,7 @@
                 Logic.playDecisionMakerAI();
                 Logic.checkForWin();
                 turnCounter++;
-            //}
+            }
             ////game ended on players turn
             //if (turnCounter % 2 == 1)
             //{
