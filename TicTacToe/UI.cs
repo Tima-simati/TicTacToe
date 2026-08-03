@@ -10,11 +10,8 @@ namespace TicTacToe
 {
     static public class UI
     {
-        public static string gridLines = "-";
-        static int gridLineBetween = Program.gameField.GetLength(1) * 4;
-
-
-        public static void welcomeScreen()
+       
+        public static void DisplayWelcomeScreen()
         {
             Console.WriteLine("Hi there. Let's play a friendly round of TicTacToe.");
         }
@@ -23,8 +20,11 @@ namespace TicTacToe
         /// method to display the current gameField; a grid around the symbols will also be added
         /// </summary>
         /// <param name="array2D">only a 2D array can be chosen</param>
-        public static void displayTicTacToeArray(string[,] array2D)
+        public static void DisplayTicTacToeArray(string[,] array2D)
         {
+            int gridLineBetween = array2D.GetLength(1) * 4;
+            string gridLines = "-";
+
             for (int i = 0; i < gridLineBetween; i++)
             {
                 gridLines += "-";
@@ -48,7 +48,7 @@ namespace TicTacToe
 
         //read player input to where to place the symbol
         //think of a way how a user can actually place a symbol into the play area
-        public static int playerInput()
+        public static int InsertPlayerInput(string[,] field)
         {
             int rows = 3, columns = 3; //for indices of User Interface Field
             string[,] fieldChooseArray = new string[rows, columns]; //User interface field
@@ -61,7 +61,7 @@ namespace TicTacToe
             {
                 for (int j = 0; j < fieldChooseArray.GetLength(1); j++)
                 {
-                    if (Program.gameField[i, j] == "X" || Program.gameField[i, j] == "O")
+                    if (field[i, j] == "X" || field[i, j] == "O")
                     {
                         fieldChooseArray[i, j] = " ";
                         chiffre++;
@@ -69,8 +69,8 @@ namespace TicTacToe
                     else
                     {
                         possibleChoices.Add(chiffre);
-                        string field = Convert.ToString(chiffre++).PadLeft(2).PadRight(3);
-                        fieldChooseArray[i, j] = field.Pastel(Color.Green);
+                        string inputField = Convert.ToString(chiffre++).PadLeft(2).PadRight(3);
+                        fieldChooseArray[i, j] = inputField.Pastel(Color.Green);
                     }
 
                 }
@@ -78,7 +78,7 @@ namespace TicTacToe
             Console.WriteLine("Please choose, where you want to put your symbol next.\n Choose your placement according to the green free fields.");
             Console.WriteLine($"Fields available are: {string.Join(", ", possibleChoices)}");
 
-            displayTicTacToeArray(fieldChooseArray);
+            DisplayTicTacToeArray(fieldChooseArray);
             int playerInput = 0;
             int.TryParse(Console.ReadLine(), out playerInput);
             while (existsInList == false)
@@ -93,30 +93,30 @@ namespace TicTacToe
             return playerInput;
         }
         //Display message if player wins
-        public static void displayPlayerWins()
+        public static void DisplayPlayerWins()
         {
             Console.WriteLine("Congratulations, you won!");
         }
         //Display message if player loses
-        public static void displayPlayerLoses()
+        public static void DisplayPlayerLoses()
         {
             Console.WriteLine("You lost. Try next time.");
         }
         //Display message if player ties
-        public static void displayPlayerTies()
+        public static void DisplayPlayerTies()
         {
             Console.WriteLine("Oh! A Tie. Nobody wins, nobody loses.");
         }
         //Give player Choice, which symbol he wants to use
-        public static int choosePlayerSymbol()
+        public static int ChoosePlayerSymbol()
         {
             throw new NotImplementedException();
         }
-        public static void cleanScreen()
+        public static void CleanScreen()
         {
             Console.Clear();
         }
-        public static bool startNewGame()
+        public static bool StartNewGame()
         {
             Console.WriteLine($"Do you want to start a new game? Press y then.");
             if (Console.ReadLine() == "y")
