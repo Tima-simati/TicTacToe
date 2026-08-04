@@ -8,11 +8,12 @@
             string[,] gameField = new string[Logic.ROWS, Logic.COLUMNS];
             bool gameResult = false;
             string symbolPlayer = "X";
-            string[,] testfield = new string[3, 3] { { "X", " ", "O" }, { "X", " ", "O" }, { "X", " ", "O" } };
+            string[,] testfield = new string[3, 3] { { symbolPlayer, " ", symbolPlayer }, { symbolPlayer, " ", "O" }, { symbolPlayer, symbolPlayer, " " } };
 
             int position = 0; //Player Input for position
             UI.DisplayWelcomeScreen();
             gameField = Logic.CreateNewGameField(gameField);
+                     
 
             while (gameResult == false)
             {
@@ -27,16 +28,17 @@
                 //UI.CleanScreen();
                 Logic.InsertInputInArray(position, gameField, symbolPlayer);
                 UI.DisplayTicTacToeArray(gameField);
+
                 if (Logic.CheckForWin(gameField, symbolPlayer))
                 {
                     UI.DisplayPlayerWins();
                     gameResult = true;
                     break;
-                }                
+                }
                 turnCounter++;// increase the turn counter
                 //CPU turn
                 Logic.PlayDecisionMakerAI(turnCounter, gameField);
-                if(Logic.CheckForWin(gameField, Logic.symbolAI))
+                if (Logic.CheckForWin(gameField, Logic.symbolAI))
                 {
                     UI.DisplayPlayerLoses();
                     gameResult = true;
@@ -45,5 +47,9 @@
                 turnCounter++;
             }
         }
+
     }
 }
+
+
+
