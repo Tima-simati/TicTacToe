@@ -42,18 +42,18 @@ namespace TicTacToe
             int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
 
             //first move to place "O" in the center, only if field is free
-            if (turn == 2 && field[CENTER_INDEX, CENTER_INDEX] == "   ")
-            {
-                field[CENTER_INDEX, CENTER_INDEX] = "O";
-                return field;
-            }
+            //if (turn == 2 && field[CENTER_INDEX, CENTER_INDEX] == "   ")
+            //{
+            //    field[CENTER_INDEX, CENTER_INDEX] = "O";
+            //    return field;
+            //}
 
-            if (CheckHorizontalLineForAI(field, "O") == true)
-            {
-                CheckHorizontalLineForAI(field, "O");
-                return field;
-            }
-            //if (verticalLineCheckAI() != 0)
+            //if (CheckHorizontalLineForAI(field, "O") == true)
+            //{
+            //    CheckHorizontalLineForAI(field, "O");
+            //    return field;
+            //}
+            //if (CheckVerticalLineForAI(field, "O") != 0)
             //{
             //    inputOfAI = verticalLineCheckAI();
             //    insertInputInArray(inputOfAI, symbolAI);
@@ -69,17 +69,6 @@ namespace TicTacToe
             if (field[randomRow, randomColumn] == "   ")
             {
                 field[randomRow, randomColumn] = "O";
-                //if AI should input O iteratively in fields, instead of random
-                //for (int i = 0; i < ROWS; i++)
-                //{
-                //    for (int j = 0; j < COLUMNS; j++)
-                //    {
-                //        if (Program.gameField[i, j] == "   ")
-                //        {
-                //            Program.gameField[i, j] = "O";
-                //        }
-                //    }
-                //}
                 return field;
 
             }
@@ -113,7 +102,7 @@ namespace TicTacToe
                 }
             }
 
-            field[row_index, column_index] = symbol; //user symbol
+            field[row_index, column_index] = symbol; //symbol
             return field;
         }
 
@@ -122,22 +111,24 @@ namespace TicTacToe
         /// checks horizontal lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
         /// </summary>
         /// <returns>position of AI next move</returns>
-        public static bool CheckHorizontalLineForAI(string[,] field, string symbol)
+        public static bool CheckHorizontalLineForAI(string[,] field)
         {
             int symbolCounterUser = 0;
             int symbolCounterAI = 0;
             int relevantRow = 0;
             bool twoSymbolsRow = false;
 
+
+
             for (int i = 0; i < ROWS; i++)
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] == symbol)
+                    if (field[i, j] != "X")
                     {
                         symbolCounterUser++;
                     }
-                    if (field[i, j] == symbolAI)
+                    if (field[i, j] == "symbolAI")
                     {
                         symbolCounterAI++;
                     }
@@ -157,7 +148,6 @@ namespace TicTacToe
                 }
             }
             return twoSymbolsRow;
-
         }
         /// <summary>
         /// checks vertical lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
@@ -222,16 +212,17 @@ namespace TicTacToe
         }
 
         /*checks when the game is over*/
-        public static bool CheckForWin()
+        public static bool CheckForWin(string[,] field, string symbol)
         {
-            //bool horizontalStatus = CheckHorizontalLineWin();
-            //bool verticalStatus = CheckVerticalLineWin();
-            //bool diagonalStatus = CheckDiagnoalLinesWin();
+            bool horizontalStatus = CheckHorizontalLineWin(field, symbol);
+            bool verticalStatus = CheckVerticalLineWin(field);
+            bool diagonalStatus = CheckDiagnoalLinesWin(field);
 
-            //if (horizontalStatus == true || verticalStatus == true || diagonalStatus == true)
-            //{
-            //    return true;
-            //}
+            //
+            if (horizontalStatus == true || verticalStatus == true || diagonalStatus == true)
+            {
+                return true;
+            }
 
             return false;
         }
@@ -242,14 +233,15 @@ namespace TicTacToe
         /// check if any of the 3 horizontal lines have same 3 symbols to win
         /// </summary>
         /// <returns>true for winning match found, false for not found</returns>
-        public static bool CheckHorizontalLineWin(string[,] field)
+        public static bool CheckHorizontalLineWin(string[,] field, string symbol)
         {
             bool allEqual = true;
             for (int i = 0; i < ROWS; i++)
             {
+                allEqual = true;
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] != "   " && field[i, j] != field[i, j + 1])
+                    if (field[i, j] != symbol || field[i, j] != field[i, j + 1])
                     {
                         allEqual = false;
                     }
@@ -270,9 +262,10 @@ namespace TicTacToe
             bool allEqual = true;
             for (int i = 0; i < COLUMNS; i++)
             {
+                allEqual = true;
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] != "   " && field[j, i] != field[j + 1, i])
+                    if (field[i, j] == "   " || field[j, i] != field[j + 1, i])
                     {
                         allEqual = false;
                     }
@@ -293,7 +286,8 @@ namespace TicTacToe
             bool allEqual = true;
             for (int i = 0, j = 0; i < LAST_INDEX_GRID; i++, j++)
             {
-                if (field[i, j] != "   " && field[i, j] != field[i + 1, j + 1])
+                allEqual = true;
+                if (field[i, j] == "   " || field[i, j] != field[i + 1, j + 1])
                 {
                     allEqual = false;
                 }
@@ -305,7 +299,8 @@ namespace TicTacToe
             allEqual = true;
             for (int i = LAST_INDEX_GRID, j = 0; i > 0; i--, j++)
             {
-                if (field[i, j] != "   " && field[i, j] != field[i - 1, j + 1])
+                allEqual = true;
+                if (field[i, j] == "   " || field[i, j] != field[i - 1, j + 1])
                 {
                     allEqual = false;
                 }
