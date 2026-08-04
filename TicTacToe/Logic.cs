@@ -53,7 +53,7 @@ namespace TicTacToe
                 CheckHorizontalLineForAI(field, "O");
                 return field;
             }
-            //if (verticalLineCheckAI() != 0)
+            //if (CheckVerticalLineForAI(field, "O") != 0)
             //{
             //    inputOfAI = verticalLineCheckAI();
             //    insertInputInArray(inputOfAI, symbolAI);
@@ -113,7 +113,7 @@ namespace TicTacToe
                 }
             }
 
-            field[row_index, column_index] = symbol; //user symbol
+            field[row_index, column_index] = symbol; //symbol
             return field;
         }
 
@@ -133,11 +133,11 @@ namespace TicTacToe
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] == symbol)
+                    if (field[i, j] == "X")
                     {
                         symbolCounterUser++;
                     }
-                    if (field[i, j] == symbolAI)
+                    if (field[i, j] == "symbolAI")
                     {
                         symbolCounterAI++;
                     }
@@ -222,16 +222,16 @@ namespace TicTacToe
         }
 
         /*checks when the game is over*/
-        public static bool CheckForWin()
+        public static bool CheckForWin(string[,] field)
         {
-            //bool horizontalStatus = CheckHorizontalLineWin();
-            //bool verticalStatus = CheckVerticalLineWin();
-            //bool diagonalStatus = CheckDiagnoalLinesWin();
+            bool horizontalStatus = CheckHorizontalLineWin(field);
+            bool verticalStatus = CheckVerticalLineWin(field);
+            bool diagonalStatus = CheckDiagnoalLinesWin(field);
 
-            //if (horizontalStatus == true || verticalStatus == true || diagonalStatus == true)
-            //{
-            //    return true;
-            //}
+            if (horizontalStatus == true || verticalStatus == true || diagonalStatus == true)
+            {
+                return true;
+            }
 
             return false;
         }

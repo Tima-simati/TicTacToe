@@ -23,17 +23,25 @@
                 }
                 UI.DisplayTicTacToeArray(gameField);
                 //Player turn
-                //position = UI.InsertPlayerInput();
+                position = UI.InsertPlayerInput(gameField);
                 //UI.CleanScreen();
-                //Logic.InsertInputInArray(position, symbolPlayer);
-                //UI.DisplayTicTacToeArray(gameField);
-                //Logic.CheckForWin();
-                //turnCounter++;// increase the turn counter
-                ////CPU turn
-                //Logic.PlayDecisionMakerAI();
-                //Logic.CheckForWin();
+                Logic.InsertInputInArray(position, gameField, symbolPlayer);
+                UI.DisplayTicTacToeArray(gameField);
+                if (Logic.CheckForWin(gameField))
+                {
+                    UI.DisplayPlayerWins();
+                    
+                }                
+                turnCounter++;// increase the turn counter
+                              //CPU turn
+                Logic.PlayDecisionMakerAI(turnCounter, gameField);
+                if(Logic.CheckForWin(gameField))
+                {
+                    UI.DisplayPlayerLoses();                    
+                }
                 turnCounter++;
             }
+
             ////game ended on players turn
             //if (turnCounter % 2 == 1)
             //{
