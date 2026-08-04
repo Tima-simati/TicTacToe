@@ -265,7 +265,7 @@ namespace TicTacToe
                 allEqual = true;
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] == "   " || field[j, i] != field[j + 1, i])
+                    if (field[j, i] == "   " || field[j, i] != field[j + 1, i])
                     {
                         allEqual = false;
                     }
