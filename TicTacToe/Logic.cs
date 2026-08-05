@@ -34,23 +34,65 @@ namespace TicTacToe
         public static string[,] PlayDecisionMakerAI(int turn, string[,] field)
         {
             //variables to randomly put AI symbol into a field
-            const int LOWERBOUND_INDEX = 0;
-            const int UPPERBOUND_INDEX = 2;
+            const int LOWERBOUND_INDEX = 1;
+            const int UPPERBOUND_INDEX = 3;
 
             Random rng = new Random();
-            int randomRow = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
-            int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
+   
+            int randomIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
+            //int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
 
             //first move to place "O" in the center, only if field is free
-            //if (turn == 2 && field[CENTER_INDEX, CENTER_INDEX] == "   ")
+            if (turn == 2 && field[CENTER_INDEX, CENTER_INDEX] == "   ")
+            {
+                field[CENTER_INDEX, CENTER_INDEX] = "O";
+                return field;
+            }
+
+            for (int i = 0; i < ROWS; i++)
+            {
+                for (int j = 0; j < COLUMNS; j++)
+                {
+                    if (field[i,j] == "   ")
+                    {
+                        field[i, j] = symbolAI;
+                        return field;
+                    }
+                }
+            }
+
+            //List<string> arrayToList = new List<string>();
+            //for (int i = 0; i < field.GetLength(0); i++)
             //{
-            //    field[CENTER_INDEX, CENTER_INDEX] = "O";
-            //    return field;
+            //    for (int j = 0; j < field.GetLength(1); j++)
+            //    {
+            //        arrayToList.Add(field[i, j]);
+            //    }
             //}
 
-            //if (CheckHorizontalLineForAI(field, "O") == true)
+            //while(arrayToList[randomIndex] != "   ")
             //{
-            //    CheckHorizontalLineForAI(field, "O");
+            //    randomIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
+            //    if (arrayToList[randomIndex] == "   ")
+            //    {
+            //        arrayToList[randomIndex] = symbolAI;
+            //        break;
+            //    }
+            //}
+            //int listIndexCounter = 0;
+            //for (int i = 0; i < ROWS; i++)
+            //{
+            //    for (int j = 0; j < COLUMNS; j++)
+            //    {
+            //        field[i, j] = arrayToList[listIndexCounter];
+            //    }
+            //    listIndexCounter++;
+            //}
+
+         
+            //if (CheckHorizontalLineForAI(field) == true)
+            //{
+            //    CheckHorizontalLineForAI(field);
             //    return field;
             //}
             //if (CheckVerticalLineForAI(field, "O") != 0)
@@ -64,15 +106,11 @@ namespace TicTacToe
             //{
             //    inputOfAI = diagonalLineCheckAI();
             //    insertInputInArray(inputOfAI, symbolAI);
-            //    return field;
-            //}
-            if (field[randomRow, randomColumn] == "   ")
-            {
-                field[randomRow, randomColumn] = "O";
-                return field;
+            //    return field;}
 
-            }
-            return field;
+               return field;
+            
+
         }
 
         /// <summary>
@@ -118,22 +156,20 @@ namespace TicTacToe
             int relevantRow = 0;
             bool twoSymbolsRow = false;
 
-
-
             for (int i = 0; i < ROWS; i++)
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] != "X")
+                    if (field[i, j] != symbolAI && field[i, j] != "   ")
                     {
                         symbolCounterUser++;
                     }
-                    if (field[i, j] == "symbolAI")
+                    if (field[i, j] == symbolAI)
                     {
                         symbolCounterAI++;
                     }
                 }
-                if (symbolCounterUser == 2 || symbolCounterAI == 2)
+                if (symbolCounterAI == 2)
                 {
                     relevantRow = i;
                     twoSymbolsRow = true;
@@ -146,6 +182,20 @@ namespace TicTacToe
                     }
                     return twoSymbolsRow;
                 }
+                if (symbolCounterUser == 2)
+                {
+                    for (int j = 0; j < COLUMNS; j++)
+                    {
+                        if (field[relevantRow, j] == "   ")
+                        {
+                            field[relevantRow, j] = symbolAI;
+                        }
+                    }
+                    return twoSymbolsRow;
+
+                }
+                symbolCounterUser = 0;
+                symbolCounterAI = 0;
             }
             return twoSymbolsRow;
         }
@@ -290,6 +340,7 @@ namespace TicTacToe
                 if (field[i, j] == "   " || field[i, j] != field[i + 1, j + 1])
                 {
                     allEqual = false;
+                    break;
                 }
             }
             if (allEqual)
@@ -303,6 +354,7 @@ namespace TicTacToe
                 if (field[i, j] == "   " || field[i, j] != field[i - 1, j + 1])
                 {
                     allEqual = false;
+                    break;
                 }
             }
             if (allEqual)

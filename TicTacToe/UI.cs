@@ -119,7 +119,8 @@ namespace TicTacToe
         public static bool StartNewGame()
         {
             Console.WriteLine($"Do you want to start a new game? Press y then.");
-            if (Console.ReadLine() == "y")
+            string wantSome = Console.ReadLine();
+            if (wantSome == "y")
             {
                 return true;
             }
