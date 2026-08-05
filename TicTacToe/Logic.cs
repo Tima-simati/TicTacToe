@@ -38,7 +38,7 @@ namespace TicTacToe
             const int UPPERBOUND_INDEX = 3;
 
             Random rng = new Random();
-   
+
             int randomIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
             //int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
 
@@ -49,11 +49,17 @@ namespace TicTacToe
                 return field;
             }
 
+            if (CheckHorizontalLineForAI(field) == true)
+            {
+                CheckHorizontalLineForAI(field);
+                return field;
+            }
+
             for (int i = 0; i < ROWS; i++)
             {
                 for (int j = 0; j < COLUMNS; j++)
                 {
-                    if (field[i,j] == "   ")
+                    if (field[i, j] == "   ")
                     {
                         field[i, j] = symbolAI;
                         return field;
@@ -89,12 +95,8 @@ namespace TicTacToe
             //    listIndexCounter++;
             //}
 
-         
-            //if (CheckHorizontalLineForAI(field) == true)
-            //{
-            //    CheckHorizontalLineForAI(field);
-            //    return field;
-            //}
+
+
             //if (CheckVerticalLineForAI(field, "O") != 0)
             //{
             //    inputOfAI = verticalLineCheckAI();
@@ -108,8 +110,8 @@ namespace TicTacToe
             //    insertInputInArray(inputOfAI, symbolAI);
             //    return field;}
 
-               return field;
-            
+            return field;
+
 
         }
 
@@ -151,25 +153,20 @@ namespace TicTacToe
         /// <returns>position of AI next move</returns>
         public static bool CheckHorizontalLineForAI(string[,] field)
         {
-            int symbolCounterUser = 0;
-            int symbolCounterAI = 0;
+            int symbolCounter = 0;
             int relevantRow = 0;
             bool twoSymbolsRow = false;
-
+            //check for AI winning condition
             for (int i = 0; i < ROWS; i++)
             {
                 for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
-                    if (field[i, j] != symbolAI && field[i, j] != "   ")
-                    {
-                        symbolCounterUser++;
-                    }
                     if (field[i, j] == symbolAI)
                     {
-                        symbolCounterAI++;
+                        symbolCounter++;
                     }
                 }
-                if (symbolCounterAI == 2)
+                if (symbolCounter == 2)
                 {
                     relevantRow = i;
                     twoSymbolsRow = true;
@@ -182,8 +179,23 @@ namespace TicTacToe
                     }
                     return twoSymbolsRow;
                 }
-                if (symbolCounterUser == 2)
+            }
+
+            symbolCounter = 0;
+            //check for AI preventing losing
+            for (int i = 0; i < ROWS; i++)
+            {
+                for (int j = 0; j < LAST_INDEX_GRID; j++)
                 {
+                    if (field[i, j] != symbolAI && field[i, j] != "   ")
+                    {
+                        symbolCounter++;
+                    }
+                }
+                if (symbolCounter == 2)
+                {
+                    relevantRow = i;
+                    twoSymbolsRow = true;
                     for (int j = 0; j < COLUMNS; j++)
                     {
                         if (field[relevantRow, j] == "   ")
@@ -192,10 +204,7 @@ namespace TicTacToe
                         }
                     }
                     return twoSymbolsRow;
-
                 }
-                symbolCounterUser = 0;
-                symbolCounterAI = 0;
             }
             return twoSymbolsRow;
         }

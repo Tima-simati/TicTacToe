@@ -24,7 +24,7 @@
                     if (turnCounter > 9)
                     {
                         UI.DisplayPlayerTies();
-                        return;
+                        break;
                     }
                     UI.DisplayTicTacToeArray(gameField);
                     //Player turn
