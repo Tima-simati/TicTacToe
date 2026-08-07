@@ -21,11 +21,7 @@
                 //loop for current game turns
                 while (gameResult == false)
                 {
-                    if (turnCounter > 9)
-                    {
-                        UI.DisplayPlayerTies();
-                        break;
-                    }
+                   
                     UI.DisplayTicTacToeArray(gameField);
                     //Player turn
                     position = UI.InsertPlayerInput(gameField);
@@ -44,7 +40,7 @@
                     }
                     turnCounter++;// increase the turn counter
                     //CPU turn
-                    Logic.PlayDecisionMakerAI(turnCounter, gameField);
+                    Logic.PlayDecisionMakerAI(gameField);
                     if (Logic.CheckForWin(gameField, Logic.symbolAI))
                     {
                         UI.DisplayPlayerLoses();
@@ -55,10 +51,17 @@
                     }
                     turnCounter++;
                     Console.WriteLine($"Turn: {turnCounter}");
+                    if (turnCounter > 9)
+                    {
+                        UI.DisplayPlayerTies();
+                        break;
+                    }
                 }
                 turnCounter = 0; //reset counter
                 gameResult = false; //reset gameResult
                 gameField = Logic.CreateNewGameField(gameField); //reset playing field
+                Logic.randomRowIndex = 1;
+                Logic.randomColumnIndex = 1;
                 newGame = UI.StartNewGame();
                 UI.CleanScreen();
             }

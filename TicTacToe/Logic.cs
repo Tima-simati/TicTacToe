@@ -13,7 +13,14 @@ namespace TicTacToe
         public const int CENTER_INDEX = 1; //const for putting AI symbol dead center in first round
         public static int inputOfAI = 0;   //symbol placement of AI
         public static string symbolAI = "O";
+        //variables to randomly put AI symbol into a field
+        const int LOWERBOUND_INDEX = 0;
+        const int UPPERBOUND_INDEX = 3;
 
+        public static readonly Random rng = new Random();
+
+        public static int randomRowIndex = 1;
+        public static int randomColumnIndex = 1;
 
         //initialization of fresh game field
         public static string[,] CreateNewGameField(string[,] field)
@@ -31,87 +38,16 @@ namespace TicTacToe
         /// <summary>
         /// method, which decides, where the CPU should place its next symbol
         /// </summary>
-        public static string[,] PlayDecisionMakerAI(int turn, string[,] field)
+        public static string[,] PlayDecisionMakerAI(string[,] field)
         {
-            //variables to randomly put AI symbol into a field
-            const int LOWERBOUND_INDEX = 1;
-            const int UPPERBOUND_INDEX = 3;
-
-            Random rng = new Random();
-
-            int randomIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
-            //int randomColumn = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
-
-            //first move to place "O" in the center, only if field is free
-            if (turn == 2 && field[CENTER_INDEX, CENTER_INDEX] == "   ")
+            while (field[randomRowIndex, randomColumnIndex] != "   ")
             {
-                field[CENTER_INDEX, CENTER_INDEX] = "O";
-                return field;
+                randomRowIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
+                randomColumnIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
             }
-
-            if (CheckHorizontalLineForAI(field) == true)
-            {
-                CheckHorizontalLineForAI(field);
-                return field;
-            }
-
-            for (int i = 0; i < ROWS; i++)
-            {
-                for (int j = 0; j < COLUMNS; j++)
-                {
-                    if (field[i, j] == "   ")
-                    {
-                        field[i, j] = symbolAI;
-                        return field;
-                    }
-                }
-            }
-
-            //List<string> arrayToList = new List<string>();
-            //for (int i = 0; i < field.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < field.GetLength(1); j++)
-            //    {
-            //        arrayToList.Add(field[i, j]);
-            //    }
-            //}
-
-            //while(arrayToList[randomIndex] != "   ")
-            //{
-            //    randomIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
-            //    if (arrayToList[randomIndex] == "   ")
-            //    {
-            //        arrayToList[randomIndex] = symbolAI;
-            //        break;
-            //    }
-            //}
-            //int listIndexCounter = 0;
-            //for (int i = 0; i < ROWS; i++)
-            //{
-            //    for (int j = 0; j < COLUMNS; j++)
-            //    {
-            //        field[i, j] = arrayToList[listIndexCounter];
-            //    }
-            //    listIndexCounter++;
-            //}
-
-
-
-            //if (CheckVerticalLineForAI(field, "O") != 0)
-            //{
-            //    inputOfAI = verticalLineCheckAI();
-            //    insertInputInArray(inputOfAI, symbolAI);
-            //    return field;
-
-            //}
-            //if (diagonalLineCheckAI() != 0)
-            //{
-            //    inputOfAI = diagonalLineCheckAI();
-            //    insertInputInArray(inputOfAI, symbolAI);
-            //    return field;}
-
+            field[randomRowIndex, randomColumnIndex] = symbolAI;
             return field;
-
+                       
 
         }
 
