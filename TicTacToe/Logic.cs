@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Pastel;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using Pastel;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TicTacToe
 {
@@ -10,7 +11,6 @@ namespace TicTacToe
     {
         public const int ROWS = 3, COLUMNS = 3; //indices of gameField
         public const int LAST_INDEX_GRID = ROWS - 1;
-        public const int CENTER_INDEX = 1; //const for putting AI symbol dead center in first round
         public static int inputOfAI = 0;   //symbol placement of AI
         public static string symbolAI = "O";
         //variables to randomly put AI symbol into a field
@@ -64,6 +64,18 @@ namespace TicTacToe
                     }
                 }
             }
+            //check for 2 same symbols in diagonal lines and insert third symbol there
+            for (int i = 0; i < ROWS; i++)
+            {
+                for (int j = 0; j < COLUMNS; j++)
+                {
+                    if (CheckIfSlotIsEmpty(field, i, j) && CheckDiagonalLineForAI(field, i, j))
+                    {
+                        field[i, j] = symbolAI;
+                        return field;
+                    }
+                }
+            }
             //not 2 same symbols found; find random new empty spot
             do
             {
@@ -73,6 +85,7 @@ namespace TicTacToe
             field[randomRowIndex, randomColumnIndex] = symbolAI;
             return field;
         }
+        //for horizontal line check: checks left spot to the current spot
         public static bool CheckLeftSpotOfIndex(string[,] array, int row, int col)
         {
             if (col == 0)
@@ -85,7 +98,7 @@ namespace TicTacToe
             }
             return false;
         }
-
+        //for horizontal line check: checks right spot to the current spot
         public static bool CheckRightSpotOfIndex(string[,] array, int row, int col)
         {
             if (col == array.GetLength(1) - 1)
@@ -98,6 +111,7 @@ namespace TicTacToe
             }
             return false;
         }
+        //for vertical line check: checks spot above the current spot
         public static bool CheckUpperSpotOfIndex(string[,] array, int row, int col)
         {
             if (row == 0)
@@ -110,6 +124,7 @@ namespace TicTacToe
             }
             return false;
         }
+        //for vertical line check: check spot above the current spot
         public static bool CheckLowerSpotOfIndex(string[,] array, int row, int col)
         {
             if (row == array.GetLength(0) - 1)
@@ -122,7 +137,59 @@ namespace TicTacToe
             }
             return false;
         }
-
+        public static bool CheckDecliningDiagonalPreviousSpot(string[,] array, int row, int col)
+        {
+            if (row == 0 && col == 0)
+            {
+                row = array.GetLength(0);
+                col = array.GetLength(1);
+            }
+            if (array[--row, --col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool CheckDecliningDiagonalNextSpot(string[,] array, int row, int col)
+        {
+            if (row == array.GetLength(0) - 1 && col == array.GetLength(1) - 1)
+            {
+                row = -1;
+                col = -1;
+            }
+            if (array[++row, ++col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool CheckIncliningDiagonalPreviousSpot(string[,] array, int row, int col)
+        {
+            if (row == array.GetLength(0) - 1 && col == 0)
+            {
+                row = -1;
+                col = array.GetLength(1);
+            }
+            if (array[++row, --col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool CheckIncliningDiagonalNextSpot(string[,] array, int row, int col)
+        {
+            if (row == 0 && col == array.GetLength(1) - 1)
+            {
+                row = array.GetLength(0);
+                col = -1;
+            }
+            if (array[--row, ++col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        //checks if spot has no symbol entry
         public static bool CheckIfSlotIsEmpty(string[,] array, int row, int col)
         {
             if (array[row, col] == "   ")
@@ -157,11 +224,10 @@ namespace TicTacToe
                     break;
                 }
             }
-
             field[row_index, column_index] = symbol; //symbol
             return field;
         }
-
+        //check if left and right spot to the current index have player symbol
         public static bool CheckHorizontalLineForAI(string[,] field, int row, int col)
         {
             if (CheckLeftSpotOfIndex(field, row, col) && CheckRightSpotOfIndex(field, row, col))
@@ -170,10 +236,7 @@ namespace TicTacToe
             }
             return false;
         }
-        /// <summary>
-        /// checks vertical lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
-        /// </summary>
-        /// <returns>position of AI next move</returns>
+        //check if upper and lower spot to the current index have player symbol
         public static bool CheckVerticalLineForAI(string[,] field, int row, int col)
         {
             if (CheckLowerSpotOfIndex(field, row, col) && CheckUpperSpotOfIndex(field, row, col))
@@ -182,42 +245,25 @@ namespace TicTacToe
             }
             return false;
         }
-            
-        /// <summary>
-        /// checks diagonal lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
-        /// </summary>
-        /// <returns>position of AI next move</returns>
-        public static int CheckDiagonalLineForAI(string[,] field)
+
+        //check if diagonal previous spot and next spot to the current index have the player symbol as entry
+        public static bool CheckDiagonalLineForAI(string[,] field, int row, int col)
         {
-            int symbolCounter = 0;
-            int positionMoveAI = 0;
-            for (int i = 0, j = 0; i < LAST_INDEX_GRID; i++, j++)
+            if (row == col)
             {
-                if (field[i, j] == field[i + 1, j + 1])
+                if (CheckDecliningDiagonalPreviousSpot(field, row, col) && CheckDecliningDiagonalNextSpot(field, row, col))
                 {
-                    symbolCounter++;
-                }
-                if (symbolCounter == 2)
-                {
-                    positionMoveAI = i + j * 3;
-                    return positionMoveAI;
+                    return true;
                 }
             }
-
-            for (int i = LAST_INDEX_GRID, j = 0; i > 0; i--, j++)
+            if (row + col == field.GetLength(0)-1)
             {
-                if (field[i, j] == field[i - 1, j + 1])
+                if (CheckIncliningDiagonalPreviousSpot(field, row, col) && CheckIncliningDiagonalNextSpot(field, row, col))
                 {
-                    symbolCounter++;
+                    return true;
                 }
-                if (symbolCounter == 2)
-                {
-                    positionMoveAI = i + j * 3;
-                    return positionMoveAI;
-                }
-
-            }
-            return positionMoveAI; //returns 0, if no 2 matching symbols found
+            }           
+            return false;
         }
 
         /*checks when the game is over*/
