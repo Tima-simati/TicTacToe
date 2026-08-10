@@ -40,11 +40,36 @@ namespace TicTacToe
         /// </summary>
         public static string[,] PlayDecisionMakerAI(string[,] field)
         {
-            while (CheckIfSlotIsEmpty(field, randomRowIndex, randomColumnIndex) != false)
+            //check for 2 same symbols in horizontal lines and insert third symbol there
+            for (int i = 0; i < ROWS; i++)
+            {
+                for (int j = 0; j < COLUMNS; j++)
+                {
+                    if (CheckIfSlotIsEmpty(field, i, j) && CheckHorizontalLineForAI(field, i, j))
+                    {
+                        field[i, j] = symbolAI;
+                        return field;
+                    }
+                }
+            }
+            //check for 2 same symbols in vertical lines and insert third symbol there
+            for (int i = 0; i < COLUMNS; i++)
+            {
+                for (int j = 0; j < ROWS; j++)
+                {
+                    if (CheckIfSlotIsEmpty(field, j, i) && CheckVerticalLineForAI(field, j, i))
+                    {
+                        field[j, i] = symbolAI;
+                        return field;
+                    }
+                }
+            }
+            //not 2 same symbols found; find random new empty spot
+            do
             {
                 randomRowIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
                 randomColumnIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
-            }
+            } while (!CheckIfSlotIsEmpty(field, randomRowIndex, randomColumnIndex));
             field[randomRowIndex, randomColumnIndex] = symbolAI;
             return field;
         }
@@ -68,6 +93,30 @@ namespace TicTacToe
                 col = -1;
             }
             if (array[row, ++col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool CheckUpperSpotOfIndex(string[,] array, int row, int col)
+        {
+            if (row == 0)
+            {
+                row = array.GetLength(0);
+            }
+            if (array[--row, col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool CheckLowerSpotOfIndex(string[,] array, int row, int col)
+        {
+            if (row == array.GetLength(0) - 1)
+            {
+                row = -1;
+            }
+            if (array[++row, col] == "X")
             {
                 return true;
             }
@@ -113,9 +162,9 @@ namespace TicTacToe
             return field;
         }
 
-        public static bool CheckHorizontalLineForAI(string[,] field)
+        public static bool CheckHorizontalLineForAI(string[,] field, int row, int col)
         {
-            if (CheckLeftSpotOfIndex(field, randomRowIndex, randomColumnIndex) && CheckRightSpotOfIndex(field, randomRowIndex, randomColumnIndex))
+            if (CheckLeftSpotOfIndex(field, row, col) && CheckRightSpotOfIndex(field, row, col))
             {
                 return true;
             }
@@ -125,27 +174,15 @@ namespace TicTacToe
         /// checks vertical lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
         /// </summary>
         /// <returns>position of AI next move</returns>
-        public static int CheckVerticalLineForAI(string[,] field)
+        public static bool CheckVerticalLineForAI(string[,] field, int row, int col)
         {
-            int symbolCounter = 0;
-            int positionMoveAI = 0;
-
-            for (int i = 0; i < COLUMNS; i++)
+            if (CheckLowerSpotOfIndex(field, row, col) && CheckUpperSpotOfIndex(field, row, col))
             {
-                for (int j = 0; j < LAST_INDEX_GRID; j++)
-                {
-                    if (field[j, i] == field[j, i + 1])
-                    {
-                        symbolCounter++;
-                    }
-                    if (symbolCounter == 2)
-                    {
-                        positionMoveAI = i + j * 3;
-                    }
-                }
+                return true;
             }
-            return positionMoveAI; //outputs AI next move
+            return false;
         }
+            
         /// <summary>
         /// checks diagonal lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
         /// </summary>
@@ -198,9 +235,6 @@ namespace TicTacToe
 
             return false;
         }
-
-        /*checks when the game is over*/
-
         /// <summary>
         /// check if any of the 3 horizontal lines have same 3 symbols to win
         /// </summary>

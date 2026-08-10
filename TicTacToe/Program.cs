@@ -39,6 +39,13 @@
                         break;
                     }
                     turnCounter++;// increase the turn counter
+                    //after last possible turn, check if turnCounter is full
+                    Console.WriteLine($"Turn: {turnCounter}");
+                    if (turnCounter > 8)
+                    {
+                        UI.DisplayPlayerTies();
+                        break;
+                    }
                     //CPU turn
                     Logic.PlayDecisionMakerAI(gameField);
                     if (Logic.CheckForWin(gameField, Logic.symbolAI))
@@ -49,13 +56,7 @@
                         gameResult = true;
                         break;
                     }
-                    turnCounter++;
-                    Console.WriteLine($"Turn: {turnCounter}");
-                    if (turnCounter > 9)
-                    {
-                        UI.DisplayPlayerTies();
-                        break;
-                    }
+                    turnCounter++;                   
                 }
                 turnCounter = 0; //reset counter
                 gameResult = false; //reset gameResult
