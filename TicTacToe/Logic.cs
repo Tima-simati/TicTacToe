@@ -40,17 +40,48 @@ namespace TicTacToe
         /// </summary>
         public static string[,] PlayDecisionMakerAI(string[,] field)
         {
-            while (field[randomRowIndex, randomColumnIndex] != "   ")
+            while (CheckIfSlotIsEmpty(field, randomRowIndex, randomColumnIndex) != false)
             {
                 randomRowIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
                 randomColumnIndex = rng.Next(LOWERBOUND_INDEX, UPPERBOUND_INDEX);
             }
             field[randomRowIndex, randomColumnIndex] = symbolAI;
             return field;
-                       
-
+        }
+        public static bool CheckLeftSpotOfIndex(string[,] array, int row, int col)
+        {
+            if (col == 0)
+            {
+                col = array.GetLength(1);
+            }
+            if (array[row, --col] == "X")
+            {
+                return true;
+            }
+            return false;
         }
 
+        public static bool CheckRightSpotOfIndex(string[,] array, int row, int col)
+        {
+            if (col == array.GetLength(1) - 1)
+            {
+                col = -1;
+            }
+            if (array[row, ++col] == "X")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool CheckIfSlotIsEmpty(string[,] array, int row, int col)
+        {
+            if (array[row, col] == "   ")
+            {
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// turn user input or AI input into array coordinates to set player symbol
         /// </summary>
@@ -82,67 +113,13 @@ namespace TicTacToe
             return field;
         }
 
-        /*checks to prevent AI lose or AI wins*/
-        /// <summary>
-        /// checks horizontal lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
-        /// </summary>
-        /// <returns>position of AI next move</returns>
         public static bool CheckHorizontalLineForAI(string[,] field)
         {
-            int symbolCounter = 0;
-            int relevantRow = 0;
-            bool twoSymbolsRow = false;
-            //check for AI winning condition
-            for (int i = 0; i < ROWS; i++)
+            if (CheckLeftSpotOfIndex(field, randomRowIndex, randomColumnIndex) && CheckRightSpotOfIndex(field, randomRowIndex, randomColumnIndex))
             {
-                for (int j = 0; j < LAST_INDEX_GRID; j++)
-                {
-                    if (field[i, j] == symbolAI)
-                    {
-                        symbolCounter++;
-                    }
-                }
-                if (symbolCounter == 2)
-                {
-                    relevantRow = i;
-                    twoSymbolsRow = true;
-                    for (int j = 0; j < COLUMNS; j++)
-                    {
-                        if (field[relevantRow, j] == "   ")
-                        {
-                            field[relevantRow, j] = symbolAI;
-                        }
-                    }
-                    return twoSymbolsRow;
-                }
+                return true;
             }
-
-            symbolCounter = 0;
-            //check for AI preventing losing
-            for (int i = 0; i < ROWS; i++)
-            {
-                for (int j = 0; j < LAST_INDEX_GRID; j++)
-                {
-                    if (field[i, j] != symbolAI && field[i, j] != "   ")
-                    {
-                        symbolCounter++;
-                    }
-                }
-                if (symbolCounter == 2)
-                {
-                    relevantRow = i;
-                    twoSymbolsRow = true;
-                    for (int j = 0; j < COLUMNS; j++)
-                    {
-                        if (field[relevantRow, j] == "   ")
-                        {
-                            field[relevantRow, j] = symbolAI;
-                        }
-                    }
-                    return twoSymbolsRow;
-                }
-            }
-            return twoSymbolsRow;
+            return false;
         }
         /// <summary>
         /// checks vertical lines for 2 player symbols about to win and prevent it or 2 AI symbols in a line and go for a win;
