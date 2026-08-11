@@ -19,9 +19,9 @@
             while (newGame)
             {
                 //loop for current game turns
-                while (gameResult == false)
+                while (!gameResult)
                 {
-                   
+
                     UI.DisplayTicTacToeArray(gameField);
                     //Player turn
                     position = UI.InsertPlayerInput(gameField);
@@ -56,13 +56,11 @@
                         gameResult = true;
                         break;
                     }
-                    turnCounter++;                   
+                    turnCounter++;
                 }
                 turnCounter = 0; //reset counter
                 gameResult = false; //reset gameResult
                 gameField = Logic.CreateNewGameField(gameField); //reset playing field
-                Logic.randomRowIndex = 1;
-                Logic.randomColumnIndex = 1;
                 newGame = UI.StartNewGame();
                 UI.CleanScreen();
             }
